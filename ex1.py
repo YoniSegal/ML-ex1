@@ -30,7 +30,7 @@ def assign_groups(X, centroids, centroid_sets):
             i += 1
 
 
-# Method divides 2 3D vectors.
+# Method divides 2 2D vectors.
 def div_vector(total_centroid, size):
     # return [total_centroid[0] / size, total_centroid[1] / size]
     return [round(total_centroid[0] / size), round(total_centroid[1] / size)]
@@ -49,26 +49,6 @@ def update_centroids(centroid_sets):
     return np.asarray(new_centroids)
 
 
-# Method prints all centroids in a given iteration.
-def print_centroids(centroids, i, k):
-    final_string = "[iter " + str(i) + "]:"
-    string = "["
-    counter = 0
-    for c in centroids:
-        first = str(np.floor((c[0] * 100)) / 100)
-        second = str(np.floor((c[1] * 100)) / 100)
-        if first == "0.0":
-            first = "0."
-        if second == "0.0":
-            second = "0."
-        counter += 1
-        string += first[:-1] + " " + second[:-1] + "]"
-        if counter != k:
-            string += ",["
-    final_string += string
-    return final_string
-
-
 # Main method takes an image and uses k-means to alter pixels around given centroids.
 if __name__ == '__main__':
     wav = sys.argv[1]
@@ -79,16 +59,16 @@ if __name__ == '__main__':
     k = [int(centroids.size / 2)]
     previous = ""
     for k in k:
-        for i in range(30):
+        for iter in range(30):
             # centroid_sets 1..n -> centroids 1..n
             # for each point x, if centroids[i] is closest to x, put x into centroid_sets[i]
             centroid_sets = [[] for j in range(k)]
             assign_groups(y, centroids, centroid_sets)
             centroids = update_centroids(centroid_sets)
-            temp1 = print_centroids(centroids, i, k) + "\n"
-            text_file.write(temp1)
-            print(temp1)
-            if i > 0 and temp1.find(previous[9:]) != -1:
+            temp1 = "{}".format(','.join(str(i) for i in centroids))
+            print("[iter {}]:".format(iter) + "{}".format(','.join(str(i) for i in centroids)))
+            text_file.write("[iter {}]:".format(iter) + "{}".format(','.join(str(i) for i in centroids)) + "\n")
+            if iter > 0 and temp1 == previous:
                 break
-            previous = temp1
+            previous = "{}".format(','.join(str(i) for i in centroids))
     text_file.close()
