@@ -73,10 +73,9 @@ def print_centroids(centroids, i, k):
 if __name__ == '__main__':
     wav = sys.argv[1]
     cents = sys.argv[2]
-    text_file = open("test" + cents, "w")
+    text_file = open("output2.txt", "w")
     fs, y = wavfile.read(wav)
     centroids = np.loadtxt(cents)
-    k = [2, 4, 8, 16]
     k = [int(centroids.size / 2)]
     previous = ""
     for k in k:
